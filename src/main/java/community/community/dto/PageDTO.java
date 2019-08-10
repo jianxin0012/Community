@@ -30,44 +30,44 @@ public class PageDTO {
             page = totalPage;
         }
         //设置本类page属性的值
-        this.page=page;
+        this.page = page;
         //添加页码
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             if (page - i > 0) {
                 pages.add(0, page - i);
             }
-            if (page + i < totalPage+1) {
+            if (page + i < totalPage + 1) {
                 pages.add(page + i);
             }
         }
 
         //是否显示首页
-        if (pages.contains(1)){
-            showFirstPage=false;
-        }else {
-            showFirstPage=true;
+        if (pages.contains(1)) {
+            showFirstPage = false;
+        } else {
+            showFirstPage = true;
         }
 
         //是否显示上一页
-        if (page!=1){
-            showPrePage=true;
-        }else {
-            showPrePage=false;
+        if (page != 1) {
+            showPrePage = true;
+        } else {
+            showPrePage = false;
         }
-
+        //showPrePage = (page == 1) ? false : true;
         //是否显示下一页
-        if (page!=totalPage){
-            showNextPage=true;
-        }else {
-            showNextPage=false;
+        if (page != totalPage) {
+            showNextPage = true;
+        } else {
+            showNextPage = false;
         }
 
         //是否显示尾页
-        if (pages.contains(totalPage)){
-            showEndPage=false;
-        }else {
-            showEndPage=true;
+        if (pages.contains(totalPage)) {
+            showEndPage = false;
+        } else {
+            showEndPage = true;
         }
 
     }

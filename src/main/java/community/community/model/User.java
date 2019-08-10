@@ -8,7 +8,7 @@ public class User {
     private String accountId;
     private String name;
     private String token;
-    private Long create_time;
-    private Long modified_time;
+    private Long createTime;
+    private Long modifiedTime;
     private String avatar;
 }

@@ -44,7 +44,6 @@ public class IndexController {
         }
         PageDTO pageList=questionService.list(page,size);
         model.addAttribute("pageList",pageList);
-
         return "index";
     }
 }
