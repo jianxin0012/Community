@@ -1,8 +1,6 @@
 package community.community.controller;
 
 import community.community.dto.PageDTO;
-import community.community.mapper.QuestionMapper;
-import community.community.mapper.UserMapper;
 import community.community.model.User;
 import community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller

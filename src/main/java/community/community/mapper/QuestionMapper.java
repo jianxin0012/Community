@@ -10,7 +10,7 @@ public interface QuestionMapper {
     @Insert("insert into question(title,description,create_time,modified_time,creator,tag) " +
             "values (#{title},#{description}," +
             "#{createTime},#{modifiedTime},#{creator},#{tag})")
-    public void create(Question question);
+    void create(Question question);
 
     @Select("select * from question limit #{offset},#{size}")
     List<Question> list(@Param("offset") Integer offset, @Param("size")Integer size);

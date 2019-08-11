@@ -5,6 +5,8 @@ import community.community.dto.QuestionDTO;
 import community.community.mapper.QuestionMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.Question;
+import community.community.model.User;
+import community.community.model.UserExample;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,10 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
-            questionDTO.setUser(userMapper.findById(question.getCreator()));
+            UserExample example = new UserExample();
+            example.createCriteria().andIdEqualTo(question.getCreator());
+            List<User> users = userMapper.selectByExample(example);
+            questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
         pageDTO.setQuestions(questionDTOList);
@@ -48,7 +53,10 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
-            questionDTO.setUser(userMapper.findById(question.getCreator()));
+            UserExample example = new UserExample();
+            example.createCriteria().andIdEqualTo(question.getCreator());
+            List<User> users = userMapper.selectByExample(example);
+            questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
         pageDTO.setQuestions(questionDTOList);
@@ -61,7 +69,10 @@ public class QuestionService {
         QuestionDTO questionDTO=new QuestionDTO();
         Question question = questionMapper.getById(id);
         BeanUtils.copyProperties(question,questionDTO);
-        questionDTO.setUser(userMapper.findById(question.getCreator()));
+        UserExample example = new UserExample();
+        example.createCriteria().andIdEqualTo(question.getCreator());
+        List<User> users = userMapper.selectByExample(example);
+        questionDTO.setUser(users.get(0));
 
         return questionDTO;
     }

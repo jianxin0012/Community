@@ -2,7 +2,6 @@ package community.community.controller;
 
 import community.community.dto.AccessTokenDTO;
 import community.community.dto.GitHubUser;
-import community.community.mapper.UserMapper;
 import community.community.model.User;
 import community.community.provider.GitHubProvider;
 import community.community.service.UserService;
@@ -46,7 +45,8 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
-        if (gitHubUser!=null){
+        //如果访问超时 出现bug
+        if (gitHubUser!=null || gitHubUser.getName()==null){
             User user = new User();
             user.setAccountId(String.valueOf(gitHubUser.getId()));
             user.setName(gitHubUser.getName());
