@@ -32,10 +32,7 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
-            UserExample example = new UserExample();
-            example.createCriteria().andIdEqualTo(question.getCreator());
-            List<User> users = userMapper.selectByExample(example);
-            questionDTO.setUser(users.get(0));
+            questionDTO.setUser(userMapper.selectByPrimaryKey(question.getCreator()));
             questionDTOList.add(questionDTO);
         }
         pageDTO.setQuestions(questionDTOList);
@@ -53,10 +50,7 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDTO questionDTO=new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
-            UserExample example = new UserExample();
-            example.createCriteria().andIdEqualTo(question.getCreator());
-            List<User> users = userMapper.selectByExample(example);
-            questionDTO.setUser(users.get(0));
+            questionDTO.setUser(userMapper.selectByPrimaryKey(question.getCreator()));
             questionDTOList.add(questionDTO);
         }
         pageDTO.setQuestions(questionDTOList);

@@ -110,6 +110,14 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from user
+      where id=#{id,jdbcType=INTEGER}
+  </select>
+
   <delete id="deleteByExample" parameterType="community.community.model.UserExample">
     <!--
       WARNING - @mbg.generated
@@ -121,6 +129,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id=#{id,jdbcType=INTEGER}
+  </delete>
+
+
   <insert id="insert" parameterType="community.community.model.User">
     <!--
       WARNING - @mbg.generated
@@ -252,7 +267,11 @@
     </if>
   </update>
 
-  <!--&amp;amp;lt;select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="community.community.model.User"&amp;amp;gt;-->
-    <!--select * from user where id=#{id,jdbcType=INTEGER}-->
-  <!--&amp;amp;lt;/select&amp;amp;gt;-->
+  <update id="updateByPrimaryKey" parameterType="community.community.model.User">
+    update user
+    set id = #{record.id,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
 </mapper>
