@@ -61,8 +61,24 @@ public class QuestionService {
         QuestionDTO questionDTO=new QuestionDTO();
         Question question = questionMapper.getById(id);
         BeanUtils.copyProperties(question,questionDTO);
-        questionDTO.setUser(userMapper.findById(id));
+        questionDTO.setUser(userMapper.findById(question.getCreator()));
 
         return questionDTO;
+    }
+
+    public void createOrUpdate(Question question) {
+        if (question.getId()==null){
+            //插入
+            question.setCreateTime(System.currentTimeMillis());
+            question.setModifiedTime(question.getCreateTime());
+            questionMapper.create(question);
+        }else {
+            Question DBQuestion=questionMapper.getById(question.getId());
+            DBQuestion.setTitle(question.getTitle());
+            DBQuestion.setDescription(question.getDescription());
+            DBQuestion.setTag(question.getTag());
+            DBQuestion.setModifiedTime(System.currentTimeMillis());
+            questionMapper.update(DBQuestion);
+        }
     }
 }
