@@ -2,6 +2,8 @@ package community.community.service;
 
 import community.community.dto.PageDTO;
 import community.community.dto.QuestionDTO;
+import community.community.exception.CustomException;
+import community.community.exception.CustomExceptionEnum;
 import community.community.mapper.QuestionMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.Question;
@@ -78,6 +80,9 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
         QuestionDTO questionDTO=new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw new CustomException(CustomExceptionEnum.QUESTION_NOT_FOUND);
+        }
         BeanUtils.copyProperties(question,questionDTO);
         UserExample example = new UserExample();
         example.createCriteria().andIdEqualTo(question.getCreator());
@@ -101,7 +106,10 @@ public class QuestionService {
             updateQuestion.setModifiedTime(System.currentTimeMillis());
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int update=questionMapper.updateByExampleSelective(updateQuestion, example);
+            if (update!=1){
+                throw new CustomException(CustomExceptionEnum.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
