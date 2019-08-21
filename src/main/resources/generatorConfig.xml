@@ -44,6 +44,6 @@
             <!--<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
         </table>
         <table schema="community" tableName="question" domainObjectName="Question" />
-
+        <table schema="community" tableName="comment" domainObjectName="Comment" />
     </context>
 </generatorConfiguration>
