@@ -1,18 +1,18 @@
 package community.community.enums;
 
-public enum CommentType {
+public enum CommentTypeEnum {
     QUESTION(1),
     COMMENT(2);
 
     private Integer type;
 
-    CommentType(Integer i) {
+    CommentTypeEnum(Integer i) {
         this.type = i;
     }
 
     public static boolean contain(Integer type) {
-        for (CommentType commentType : CommentType.values()) {
-            if (commentType.getType() == type) {
+        for (CommentTypeEnum commentTypeEnum : CommentTypeEnum.values()) {
+            if (commentTypeEnum.getType() == type) {
                 return true;
             }
         }

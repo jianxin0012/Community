@@ -1,5 +1,7 @@
 package community.community.controller;
 
+import community.community.exception.CustomException;
+import community.community.exception.CustomExceptionEnum;
 import community.community.mapper.QuestionMapper;
 import community.community.model.Question;
 import community.community.model.User;
@@ -29,8 +31,12 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
-                       Model model){
+                       Model model,HttpServletRequest request){
         Question question=questionMapper.selectByPrimaryKey(id);
+        User user = (User)request.getSession().getAttribute("user");
+        if (question.getCreator()!=user.getId()){
+            throw new CustomException(CustomExceptionEnum.CAN_NOT_EDIT_QUESTION);
+        }
         model.addAttribute("id",id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());

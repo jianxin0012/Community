@@ -6,18 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PageDTO {
-    private List<QuestionDTO> questions;//问题
+public class PageDTO<T> {
+    private List<T> data;//问题或通知
     private Integer page;//当前页
     private Boolean showFirstPage;//首页
     private Boolean showPrePage;//上一页
     private List<Integer> pages = new ArrayList<>();
     private Boolean showNextPage;//下一页
     private Boolean showEndPage;//尾页
-
+    private Integer totalCount;//总问题数
     private Integer totalPage;//总页数
 
     public void setPagination(Integer totalCount, Integer page, Integer size) {
+        this.totalCount=totalCount;
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {

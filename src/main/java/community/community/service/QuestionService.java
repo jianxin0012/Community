@@ -5,12 +5,14 @@ import community.community.dto.QuestionDTO;
 import community.community.exception.CustomException;
 import community.community.exception.CustomExceptionEnum;
 import community.community.mapper.QuestionExtMapper;
+import community.community.mapper.QuestionExtMapper2;
 import community.community.mapper.QuestionMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.Question;
 import community.community.model.QuestionExample;
 import community.community.model.User;
 import community.community.model.UserExample;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +32,18 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Autowired
+    private QuestionExtMapper2 questionExtMapper2;
+
     public PageDTO list(Integer page, Integer size) {
         //limit偏移量
         Integer offset = (page - 1) * size;
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("create_time desc,id desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-        PageDTO pageDTO = new PageDTO();
+        PageDTO<QuestionDTO> pageDTO = new PageDTO<>();
         for (Question question : questions) {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -46,7 +53,7 @@ public class QuestionService {
             questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
 
         QuestionExample example = new QuestionExample();
         long l = questionMapper.countByExample(example);
@@ -63,7 +70,7 @@ public class QuestionService {
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-        PageDTO pageDTO = new PageDTO();
+        PageDTO<QuestionDTO> pageDTO = new PageDTO<>();
         for (Question question : questions) {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -73,7 +80,7 @@ public class QuestionService {
             questionDTO.setUser(users.get(0));
             questionDTOList.add(questionDTO);
         }
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(example);//总数据数(总问题数)
@@ -129,5 +136,24 @@ public class QuestionService {
 //        example.createCriteria().andIdEqualTo(id);
 //        questionMapper.updateByExampleSelective(updateQuestion, example);
           questionExtMapper.incView(id);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if (StringUtils.isBlank(questionDTO.getTag())){
+            return new ArrayList<>();
+        }
+        String tag = StringUtils.replace(questionDTO.getTag(), ",", "|");
+        Question question=new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(tag);
+        List<Question> relatedQuestions = questionExtMapper2.selectRelated(question);
+        List<QuestionDTO> relatedQuestionDTO=new ArrayList<>();
+        for (Question relatedQuestion : relatedQuestions) {
+            QuestionDTO questionDTO1 = new QuestionDTO();
+            BeanUtils.copyProperties(relatedQuestion,questionDTO1);
+            questionDTO1.setUser(questionDTO.getUser());
+            relatedQuestionDTO.add(questionDTO1);
+        }
+        return relatedQuestionDTO;
     }
 }

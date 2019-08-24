@@ -10,4 +10,7 @@ public interface QuestionExtMapper {
 
     @Update("update question set comment_count=comment_count+1 where id=#{id}")
     void incComment(@Param("id")Long id);
+
+    @Update("update comment set comment_count=comment_count+1 where id=#{id}")
+    void incSecComment(@Param("id")Long id);
 }

@@ -8,6 +8,7 @@ create table comment
   create_time bigint null,
   modified_time bigint null,
   like_count bigint default 0 null,
+  comment_count bigint default 0 null,
   constraint comment_pk
     primary key (id)
 );

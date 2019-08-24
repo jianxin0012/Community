@@ -45,5 +45,6 @@
         </table>
         <table schema="community" tableName="question" domainObjectName="Question" />
         <table schema="community" tableName="comment" domainObjectName="Comment" />
+        <table schema="community" tableName="notification" domainObjectName="Notification" />
     </context>
 </generatorConfiguration>
