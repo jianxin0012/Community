@@ -16,4 +16,22 @@
     <select id="selectRelated" parameterType="community.community.model.Question" resultMap="BaseResultMap">
         select * from question where id !=#{id} and tag REGEXP #{tag}
     </select>
+    <select id="countBySearch" parameterType="community.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
+        select count(*) from question
+        <where>
+            <if test="search!=null">
+                and title REGEXP #{search}
+            </if>
+        </where>
+    </select>
+    <select id="selectBySearch" parameterType="community.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+        select * from question
+        <where>
+            <if test="search!=null">
+                and title REGEXP #{search}
+            </if>
+        </where>
+        order by create_time desc
+        limit #{offset},#{size}
+    </select>
 </mapper>

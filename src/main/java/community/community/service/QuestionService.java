@@ -2,6 +2,7 @@ package community.community.service;
 
 import community.community.dto.PageDTO;
 import community.community.dto.QuestionDTO;
+import community.community.dto.QuestionQueryDTO;
 import community.community.exception.CustomException;
 import community.community.exception.CustomExceptionEnum;
 import community.community.mapper.QuestionExtMapper;
@@ -35,15 +36,25 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper2 questionExtMapper2;
 
-    public PageDTO list(Integer page, Integer size) {
-        //limit偏移量
-        Integer offset = (page - 1) * size;
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("create_time desc,id desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
+    public PageDTO list(String search, Integer page, Integer size) {
+
+        if (StringUtils.isNotBlank(search)){
+            String tag = StringUtils.replace(search, " ", "|");
+        }
 
         PageDTO<QuestionDTO> pageDTO = new PageDTO<>();
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper2.countBySearch(questionQueryDTO);//总数据数(总问题数)
+        pageDTO.setPagination(totalCount, page, size);
+        //limit偏移量
+        Integer offset = (page - 1) * size;
+        questionQueryDTO.setOffset(offset);
+        questionQueryDTO.setSize(size);
+        List<Question> questions = questionExtMapper2.selectBySearch(questionQueryDTO);
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+
+
         for (Question question : questions) {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -55,10 +66,8 @@ public class QuestionService {
         }
         pageDTO.setData(questionDTOList);
 
-        QuestionExample example = new QuestionExample();
-        long l = questionMapper.countByExample(example);
-        Integer totalCount = (int) l;//总数据数(总问题数)
-        pageDTO.setPagination(totalCount, page, size);
+
+
         return pageDTO;
     }
 
