@@ -6,7 +6,7 @@ create table notification
   outerId bigint not null,
   type int not null,
   create_time bigint not null,
-  type int default 0 not null,
+  status int default 0 not null,
   constraint notification_pk
     primary key (id)
 );

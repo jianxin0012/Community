@@ -1,4 +1,4 @@
-create table test2
+create table user
 (
   id            int auto_increment
     primary key,
@@ -6,5 +6,6 @@ create table test2
   name          varchar(50)  null,
   token         char(36)     null,
   create_time   bigint       null,
-  modified_time bigint       null
+  modified_time bigint       null,
+  avatar varchar(64)       null
 );
